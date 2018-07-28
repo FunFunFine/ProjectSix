@@ -28,13 +28,15 @@ def main():
     return alice_response.dumps()
 
 
-def handle_dialog(request, response, user_storage):
-    if request.is_new_session:
+def handle_dialog(req, res, user_storage):
+    if req.is_new_session:
         user_storage = {}
-        response.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов')
-        response.set_end_session(True)
+        res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
+                          'Какие ингредиенты у вас есть?')
+        res.end()
 
-        return response, user_storage
+        return res, user_storage
     else:
-        response.set_text('Добрый день')
-        return response, user_storage
+        user_storage = {}
+        res.set_text('Привет')
+        return res, user_storage
