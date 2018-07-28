@@ -8,7 +8,8 @@ with open('./ingridients.json', 'r') as f:
 def get_recipes(ingridients, amount=1):
     try:
         nums = words_to_digits(ingridients)
-        links = get_links(*nums)
+        links = get_links(nums)
+        print(type(links))
         return links[:amount]
     except Exception as e:
         print(e)
@@ -44,8 +45,9 @@ def words_to_digits(ingredients):
     return ingred
 
 
-def get_links(*ingr_nums):
+def get_links(ingr_nums):
     init_link = 'https://eda.ru/recepty/ingredienty/' + '/'.join(ingr_nums)
+    print(init_link)
     session = HTMLSession()
     r = session.get(init_link)
     dict1 = r.html.find('div,p,div,ul,div')
@@ -61,4 +63,4 @@ def get_links(*ingr_nums):
     return list(iter(zip(links, names)))
 
 
-print(get_links(words_to_digits(['рис', 'сыр'])))
+
