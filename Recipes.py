@@ -1,7 +1,7 @@
 from requests_html import *
 import json
 
-with ('./ingridients.json', 'r') as f:
+with open('./ingridients.json', 'r') as f:
     INGRIDIENTS = json.load(f)
 
 
