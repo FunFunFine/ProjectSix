@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import logging
 import json
 import Recipes
-import ingridients_string_to_list
+
 
 from alice_sdk import AliceRequest, AliceResponse
 
@@ -38,18 +38,17 @@ def handle_dialog(req, res, user_storage):
         user_storage = {}
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
                           'Какие ингредиенты у вас есть?')
-        dishes = Recipes.get_recipes()
-
-        res.set_items(dishes)
         res.end()
 
         return res, user_storage
     else:
-
-        ingridients = ingridients_string_to_list.string_to_list_space(req.command)
+        import time
+        start = time.time()
+        ingridients = req.command.split()
 
         dishes = Recipes.get_recipes(ingridients)
-
+        t = time.time() - start
+        print(t)
         res.set_items(Dish.get_dishes(dishes))
 
         user_storage = {}
