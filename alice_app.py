@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-import json
 import logging
 
 from alice_sdk import AliceRequest, AliceResponse
@@ -29,7 +28,13 @@ def main():
     return alice_response.dumps()
 
 
-def handle_dialog(request, response, user_starage):
-    response.set_text('Иди на хуй')
+def handle_dialog(request, response, user_storage):
+    if request.is_new_session:
+        user_storage = {}
+        response.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов')
+        response.set_end_session(True)
 
-    return response, user_starage
+        return response, user_storage
+    else:
+        response.set_text('Добрый день')
+        return response, user_storage
