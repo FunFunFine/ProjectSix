@@ -52,6 +52,34 @@ class AliceResponse(object):
     def set_buttons(self, buttons):
         self._response_dict['response']['buttons'] = buttons
 
+    def set_items(self, items):
+        self._response_dict['response']['card'] = {
+            'type': 'ItemList',
+            'header': {
+                'text': 'Блюда'
+            },
+            'items': items
+        }
+
+    def set_items(self):
+        self._response_dict['response']['card'] = {
+                'type': "ItemsList",
+                'header': {
+                    'text': "Блюда"
+                },
+                'items': [
+                    {
+                    'image_id': "5274",
+                    'title': "Фуагра",
+                    'description': "Специальным образом приготовленная печень откормленного гуся или утки.",
+                    'button': {
+                        'text': 'Текст кнопки',
+                        'url': "https://4damki.ru/wp-content/uploads/2016/02/chto-takoe-fuagra-800x445.jpg"
+                    }
+                    }
+                ]
+            }
+
     def end(self):
         self._response_dict["response"]["end_session"] = True
 

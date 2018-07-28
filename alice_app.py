@@ -33,6 +33,8 @@ def handle_dialog(req, res, user_storage):
         user_storage = {}
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
                           'Какие ингредиенты у вас есть?')
+
+        res.set_items()
         res.end()
 
         return res, user_storage
