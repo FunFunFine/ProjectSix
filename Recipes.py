@@ -37,10 +37,10 @@ def words_to_digits(ingredients):
     ingred = []
     with open('ingridients.json', 'r') as f:
         d = json.load(f)
-        alphabet = {k.lower(): v for k, v in d.items()}
     for ingredient in ingredients:
-        result = [value for key, value in alphabet.items() if ingredient in key.lower()]
-        ingred.append(result[0])
+        result = [value for key, value in d.items() if ingredient in key.lower()]
+        if result:
+            ingred.append(result[0])
     return ingred
 
 

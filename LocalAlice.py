@@ -31,8 +31,9 @@ def find_ingridients(phrase):
 
 
 def ingridients_to_food(ingridients):
-    if ingridients.__contains__('яйца') and ingridients.__contains__('лук'):
-        return 'омлет'
+    if ingridients:
+        return ingridients[0][0]
+    return None
 
 def parse_suggestion_answer(answer):
     if re.search(r'другое', answer) is not None:
@@ -46,8 +47,14 @@ print(hello_phrase)
 string = input()
 ingridients = find_ingridients(string)
 print(ingridients)
-print(suggestion_phrase.format(ingridients_to_food(ingridients)))
-res = parse_suggestion_answer(input())
+reciept = ingridients_to_food(ingridients)
+if reciept is None:
+    res = random.choice(deny_phrase_words)
+    res = res.format('рецепт')
+    print(f"{res}")
+else:
+    print(suggestion_phrase.format(reciept.lower()))
+    res = parse_suggestion_answer(input())
 
 
 def show_receipt(param):
