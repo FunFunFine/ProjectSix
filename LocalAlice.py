@@ -46,6 +46,14 @@ print(hello_phrase)
 string = input()
 ingridients = find_ingridients(string)
 print(suggestion_phrase.format(ingridients_to_food(ingridients)))
-parse_suggestion_answer(input())
+res = parse_suggestion_answer(input())
+
+
+def show_receipt(param):
+    pass
+
+
+if res == 2:
+    show_receipt(ingridients_to_food(ingridients))
 """regex = re.compile('')
 ... яблоко груша лимон"""
