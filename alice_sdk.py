@@ -54,14 +54,14 @@ class AliceResponse(object):
 
     def set_items(self, items):
         self._response_dict['response']['card'] = {
-            'type': 'ItemList',
+            'type': 'ItemsList',
             'header': {
                 'text': 'Блюда'
             },
             'items': items
         }
 
-    def set_items(self):
+    '''def set_items(self):
         self._response_dict['response']['card'] = {
                 'type': "ItemsList",
                 'header': {
@@ -79,6 +79,7 @@ class AliceResponse(object):
                     }
                 ]
             }
+            '''
 
     def end(self):
         self._response_dict["response"]["end_session"] = True

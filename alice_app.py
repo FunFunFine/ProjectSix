@@ -1,11 +1,14 @@
 from __future__ import unicode_literals
 
 import logging
+import json
 
 from alice_sdk import AliceRequest, AliceResponse
 
 from flask import Flask, request
 app = Flask(__name__)
+
+from Utilities import Dish
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -34,7 +37,8 @@ def handle_dialog(req, res, user_storage):
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
                           'Какие ингредиенты у вас есть?')
 
-        res.set_items()
+        dishes = [Dish.get_dish('5751', 'Шаурма', 'От души', 'Шаурма', 'http://dostavka-trapeznikov.ru/image/cache/catalog/dsc_2744-500x500.jpg')]
+        res.set_items(dishes)
         res.end()
 
         return res, user_storage
