@@ -9,7 +9,6 @@ def get_recipes(ingridients, amount=1):
     try:
         nums = words_to_digits(ingridients)
         links = get_links(nums)
-        print(type(links))
         return links[:amount]
     except Exception as e:
         print(e)
@@ -47,7 +46,6 @@ def words_to_digits(ingredients):
 
 def get_links(ingr_nums):
     init_link = 'https://eda.ru/recepty/ingredienty/' + '/'.join(ingr_nums)
-    print(init_link)
     session = HTMLSession()
     r = session.get(init_link)
     dict1 = r.html.find('div,p,div,ul,div')

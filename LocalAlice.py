@@ -1,5 +1,6 @@
 import random
 import re
+import Recipes
 
 
 regex = re.compile(r'.*(покажи|попробовать|приготовить)')
@@ -12,17 +13,16 @@ hello_phrase = "Здравствуйте, я помогу вам подобра�
 
 suggestion_phrase = "Вы можете приготовить {0}. Показать рецепт или поискать что нибудь другое?"
 
-all_ingridients = ['яйца', 'помидоры', 'лук']
+all_ingridients = Recipes.INGRIDIENTS.keys()
 
 
 def find_ingridients(phrase):
     needed_ingridients = []
     phrase = re.split(r'[ |,|.]', phrase)
     for word in phrase:
-        if word in all_ingridients:
-            needed_ingridients.append(word)
+        needed_ingridients.append(word)
     if len(needed_ingridients) != 0:
-        return needed_ingridients
+        return Recipes.get_recipes(needed_ingridients,amount=2)
     else:
         res = random.choice(deny_phrase_words)
         res = res.format('ингридиент')
@@ -45,6 +45,7 @@ print(hello_phrase)
 #прилетает какая-то фраза
 string = input()
 ingridients = find_ingridients(string)
+print(ingridients)
 print(suggestion_phrase.format(ingridients_to_food(ingridients)))
 res = parse_suggestion_answer(input())
 
