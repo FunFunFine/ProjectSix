@@ -59,14 +59,17 @@ def get_links(ingr_nums, n=1):
     dict1 = r.html.find('div,p,div,ul,div')
     links = []
     names = []
+    pic = []
     for e in dict1[1:]:
         if 'data-title' in e.attrs:
             links.append(e.attrs['data-title'])
+        if 'data-src' in e.attrs:
+            pic.append(e.attrs['data-src'])
         if 'data-href' in e.attrs:
             s = e.attrs['data-href']
             if s.startswith('/'):
                 names.append('https://eda.ru/' + s)
-    return list(iter(zip(links, names)))
+    return list(iter(zip(links, names, pic)))
 
 
 

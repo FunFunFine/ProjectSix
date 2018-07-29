@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.DEBUG)
 session_storage = {}
 
 
-
 @app.route("/", methods=['POST'])
 def main():
     alice_request = AliceRequest(request.json)
@@ -49,12 +48,20 @@ def handle_dialog(req, res, user_storage):
         start = time.time()
         ingridients = req.command.split()
 
-        dishes = Recipes.get_recipes(ingridients)
+        dishes = Recipes.get_recipes(ingridients, amount=3)
         t = time.time() - start
         print(t)
 
-        res.set_items([Dish.get_dish('5274', dishes[0][0], 'какое-то описание', dishes[0][0], dishes[0][1])])
-        
+        def get_items(dishes):
+            items = []
+            for dish in dishes:
+                items.append(Dish.get_dish('5274', dish[0], 'какое-то описание', dish[0], dish[1]))
+            return items
+
+
+        res.set_text('Вы можете попробовать одно из этих блюд')
+        res.set_items(get_items(dishes))
+
         res.end()
         user_storage = {}
 
