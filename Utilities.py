@@ -1,5 +1,3 @@
-import json
-
 class Dish(object):
     @staticmethod
     def get_dishes(dishes):

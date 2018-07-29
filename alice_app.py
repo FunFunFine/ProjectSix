@@ -4,10 +4,10 @@ import logging
 import json
 import Recipes
 
-
 from alice_sdk import AliceRequest, AliceResponse
 
 from flask import Flask, request
+
 app = Flask(__name__)
 
 from Utilities import Dish
@@ -15,6 +15,9 @@ from Utilities import Dish
 logging.basicConfig(level=logging.DEBUG)
 
 session_storage = {}
+
+
+
 @app.route("/", methods=['POST'])
 def main():
     alice_request = AliceRequest(request.json)
@@ -37,7 +40,7 @@ def handle_dialog(req, res, user_storage):
     if req.is_new_session:
         user_storage = {}
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
-                          'Какие ингредиенты у вас есть?')
+                     'Какие ингредиенты у вас есть?')
         res.end()
 
         return res, user_storage
@@ -49,8 +52,10 @@ def handle_dialog(req, res, user_storage):
         dishes = Recipes.get_recipes(ingridients)
         t = time.time() - start
         print(t)
-        res.set_items(Dish.get_dishes(dishes))
 
+        res.set_items([Dish.get_dish('5274', dishes[0][0], 'какое-то описание', dishes[0][0], dishes[0][1])])
+        
+        res.end()
         user_storage = {}
 
         return res, user_storage
