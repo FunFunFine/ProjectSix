@@ -56,7 +56,7 @@ class AliceResponse(object):
         self._response_dict['response']['card'] = {
             'type': 'ItemsList',
             'header': {
-                'text': 'Блюда'
+                'text': 'Подходящие вам блюда'
             },
             'items': items
         }
