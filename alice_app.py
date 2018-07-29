@@ -1,21 +1,18 @@
 from __future__ import unicode_literals
 
 import logging
-import json
 import Recipes
-
-from alice_sdk import AliceRequest, AliceResponse
-
-from flask import Flask, request
 import random
 
+from flask import Flask, request
 app = Flask(__name__)
 
+from alice_sdk import AliceRequest, AliceResponse
 from Utilities import Dish
 
 logging.basicConfig(level=logging.DEBUG)
 
-session_storage = {}
+SESSION_STORAGE = {}
 
 
 @app.route("/", methods=['POST'])
@@ -27,8 +24,8 @@ def main():
 
     user_id = alice_request.user_id
 
-    alice_response, session_storage[user_id] = handle_dialog(
-        alice_request, alice_response, session_storage.get(user_id)
+    alice_response, SESSION_STORAGE[user_id] = handle_dialog(
+        alice_request, alice_response, SESSION_STORAGE.get(user_id)
     )
 
     logging.info('Response: {}'.format(alice_response))
@@ -56,23 +53,18 @@ def on_ok(res, dishes):
 
 def handle_dialog(req, res, user_storage):
     if req.is_new_session:
-        user_storage = {}
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюда из имеющихся у вас ингредиентов.\n'
                      'Какие ингредиенты у вас есть?')
-        res.end()
-
-        return res, user_storage
     else:
-        ingridients = req.command.split()
-
-        dishes = Recipes.get_recipes(ingridients, amount=3)
+        dishes = Recipes.get_recipes(req.command.split(), amount=3)
 
         if len(dishes) <= 0:
             on_error(res)
         else:
             on_ok(res, dishes)
 
-        res.end()
-        user_storage = {}
 
-        return res, user_storage
+    res.end()
+    user_storage = {}
+
+    return res, user_storage
