@@ -1,5 +1,6 @@
 from requests_html import HTMLSession
 import json
+import random
 from time import time
 
 with open('./ingridients.json', 'r') as f:
@@ -44,14 +45,14 @@ def words_to_digits(ingredients):
     for ingredient in ingredients:
         result = [value for key, value in d.items() if ingredient in key.lower()]
         if result:
-            ingred.append(result[0])
+            index = random.randint(0, len(result)-1)
+            ingred.append(result[index])
     return ingred
 
 SESSION = HTMLSession()
 SESSION.get('https://eda.ru/')
 
 def get_links(ingr_nums, n=1):
-
     init_link = 'https://eda.ru/recepty/ingredienty/' + '/'.join(ingr_nums)
     print(init_link)
     session = HTMLSession()
@@ -62,14 +63,43 @@ def get_links(ingr_nums, n=1):
     pic = []
     for e in dict1[1:]:
         if 'data-title' in e.attrs:
-            links.append(e.attrs['data-title'])
+            names.append(e.attrs['data-title'])
         if 'data-src' in e.attrs:
             pic.append(e.attrs['data-src'])
         if 'data-href' in e.attrs:
             s = e.attrs['data-href']
             if s.startswith('/'):
-                names.append('https://eda.ru/' + s)
-    return list(iter(zip(links, names, pic)))
+                # link = 'https://eda.ru/' + s
+                # ingredients = get_recipe_ingredients(link)
+                # ingred.append(ingredients)
+                links.append('https://eda.ru/' + s)
+    return list(iter(zip(names, links, pic)))
+
+
+def get_recipe_ingredients(url):
+    session = HTMLSession()
+    r = session.get(url)
+    dict1 = r.html.find('div,p,div,ul,div')
+    # tuple = ('recipe__steps',)
+    list = []
+    for e in dict1:
+        # if tuple in e.attrs.values():
+        #     x = (e.find('li,div'))
+        #     print(x)
+        #     print(e.attrs.values())
+        if 'data-ingredient-object' in e.attrs:
+            dict = e.attrs['data-ingredient-object']
+            d = json.loads(dict)
+            # id = d['id']
+            name = d['name']
+            amount = d['amount']
+            list.append((name, amount))
+        if 'in_read' in e.attrs.values():
+            break
+    return tuple(list)
+
+# print(get_recipe_ingredients('https://eda.ru//recepty/supy/tomatnij-sup-pjure-20131'))
+# result = get_recipes(['сыр','колбаса'])
 
 
 
