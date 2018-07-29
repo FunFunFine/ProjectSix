@@ -7,7 +7,6 @@ with open('./ingridients.json', 'r') as f:
     INGRIDIENTS = json.load(f)
 
 
-
 def get_recipes(ingridients, amount=1):
     try:
         nums = words_to_digits(ingridients)
@@ -61,6 +60,9 @@ def get_links(ingr_nums, n=1):
     links = []
     names = []
     pic = []
+    temp_ingred = []
+    ingred = []
+    end_phrase = ('horizontal-tile__bottom-content',)
     for e in dict1[1:]:
         if 'data-title' in e.attrs:
             names.append(e.attrs['data-title'])
@@ -69,37 +71,73 @@ def get_links(ingr_nums, n=1):
         if 'data-href' in e.attrs:
             s = e.attrs['data-href']
             if s.startswith('/'):
-                # link = 'https://eda.ru/' + s
-                # ingredients = get_recipe_ingredients(link)
-                # ingred.append(ingredients)
                 links.append('https://eda.ru/' + s)
-    return list(iter(zip(names, links, pic)))
-
-
-def get_recipe_ingredients(url):
-    session = HTMLSession()
-    r = session.get(url)
-    dict1 = r.html.find('div,p,div,ul,div')
-    # tuple = ('recipe__steps',)
-    list = []
-    for e in dict1:
-        # if tuple in e.attrs.values():
-        #     x = (e.find('li,div'))
-        #     print(x)
-        #     print(e.attrs.values())
         if 'data-ingredient-object' in e.attrs:
             dict = e.attrs['data-ingredient-object']
             d = json.loads(dict)
             # id = d['id']
             name = d['name']
             amount = d['amount']
-            list.append((name, amount))
-        if 'in_read' in e.attrs.values():
-            break
-    return tuple(list)
+            temp_ingred.append((name, amount))
+        if end_phrase in e.attrs.values():
+            ingred.append(tuple(temp_ingred))
+            temp_ingred.clear()
+    return list(iter(zip(names, links, pic, ingred)))
+# RESULT EXAMPLE
+# [
+#   (
+#       'Омлет с помидорами',
+#       'https://eda.ru//recepty/zavtraki/omlet-s-pomidorami-21293',
+#       '//img01.rl0.ru/eda/c285x285i/s2.eda.ru/Photos/120131090525-120213185012-p-O-omlet-s-pomidorami.jpg',
+#       (
+#           ('Яйцо куриное', '3 штуки'),
+#           ('Помидоры', '1 штука'),
+#           ('Соль', '⅓ чайной ложки'),
+#           ('Подсолнечное масло', '1 столовая ложка')
+#       )
+#   ),
+#   (
+#       'Омлет с моцареллой и помидорами',
+#       'https://eda.ru//recepty/zavtraki/omlet-s-mocarelloj-pomidorami-17598',
+#       '//img09.rl0.ru/eda/c285x285i/s1.eda.ru/Photos/130829212936-130904175634-p-O-omlet-s-mocarelloj-pomidorami.jpg', 
+#       (
+#           ('Яйцо куриное', '3 штуки'),
+#           ('Помидоры черри', '4 штуки'),
+#           ('Сливочное масло', '20 г'),
+#           ('Сыр моцарелла', '50 г'),
+#           ('Зеленый базилик ', '20 г'),
+#           ('Оливковое масло', 'по вкусу'),
+#           ('Соль', 'по вкусу'),
+#           ('Перец черный молотый', 'по вкусу')
+#       )
+#   ),
+# ]
+
+# def get_recipe_ingredients(url):
+#     session = HTMLSession()
+#     r = session.get(url)
+#     dict1 = r.html.find('div,p,div,ul,div')
+#     # tuple = ('recipe__steps',)
+#     tuple = ('horizontal-tile__bottom-content',)
+#     list = []
+#     for e in dict1:
+#         # if tuple in e.attrs.values():
+#         #     x = (e.find('li,div'))
+#         #     print(x)
+#         #     print(e.attrs.values())
+#         if 'data-ingredient-object' in e.attrs:
+#             dict = e.attrs['data-ingredient-object']
+#             d = json.loads(dict)
+#             # id = d['id']
+#             name = d['name']
+#             amount = d['amount']
+#             list.append((name, amount))
+#         if 'in_read' in e.attrs.values():
+#             break
+#     return tuple(list)
 
 # print(get_recipe_ingredients('https://eda.ru//recepty/supy/tomatnij-sup-pjure-20131'))
-# result = get_recipes(['сыр','колбаса'])
+# result = get_recipes(['яйцо','помидоры'])
 
 
 
