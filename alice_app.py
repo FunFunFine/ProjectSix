@@ -57,7 +57,7 @@ def on_ok(res, dishes):
 def handle_dialog(req, res, user_storage):
     if req.is_new_session:
         user_storage = {}
-        res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюди из имеющихся у вас ингредиентов.'
+        res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюдо из имеющихся у вас ингредиентов.\n'
                      'Какие ингредиенты у вас есть?')
         res.end()
 
