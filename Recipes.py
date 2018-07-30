@@ -42,7 +42,9 @@ def words_to_digits(ingredients):
     with open('ingridients.json', 'r') as f:
         d = json.load(f)
     for ingredient in ingredients:
-        result = [value for key, value in d.items() if ingredient in key.lower()]
+        result = [value for key, value in d.items() if len(key.lower()) == len(ingredient) and ingredient in key.lower()]
+        if not result:
+            result = [value for key, value in d.items() if key.lower().startswith(ingredient)]
         if result:
             index = random.randint(0, len(result)-1)
             ingred.append(result[index])
@@ -137,7 +139,5 @@ def get_links(ingr_nums, n=1):
 #     return tuple(list)
 
 # print(get_recipe_ingredients('https://eda.ru//recepty/supy/tomatnij-sup-pjure-20131'))
-# result = get_recipes(['яйцо','помидоры'])
-
-
+# result = get_recipes(['яйцо','помидоры','молоко'])
 
