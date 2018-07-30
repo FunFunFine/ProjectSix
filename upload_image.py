@@ -9,6 +9,7 @@ r = requests.post(
     "https://dialogs.yandex.net/api/v1/skills/{0}/images".format(SKILL_ID)
 )
 
+
 def download_image(url):
     headers = {
         'Authorization': 'OAuth {0}'.format(OAUTH_TOKEN),
@@ -27,7 +28,9 @@ def download_image(url):
     print(r.text)
     return r.json()
 
+
 IMGS = []
+
 
 def get_image_id(url):
     id = None
@@ -38,37 +41,32 @@ def get_image_id(url):
             break
 
     if not id:
-        # from threading import Thread
-
         def downld_img():
             response = download_image(url)
             IMGS.append(response)
             return response
-
-        response = downld_img()
-
-        id = response['image']['id']
+        id = '0'
 
     return id
 
-
-
+# from time import sleep
 # from time import time
 # import Recipes
-# t1 = time()
-# dishes = Recipes.get_recipes(['рис'], amount=2)
-# print(dishes[0][2])
-# for dish in dishes:
-#     img_id = get_image_id(dish[2])
-# print(IMGS)
-# t2 = time()
-# print(t2-t1)
 #
 # t1 = time()
 # dishes = Recipes.get_recipes(['рис'], amount=2)
-# print(dishes[0][2])
+# # print(dishes[0][2])
 # for dish in dishes:
 #     img_id = get_image_id(dish[2])
 # print(IMGS)
 # t2 = time()
-# print(t2-t1)
+# print(t2 - t1)
+#
+# t1 = time()
+# dishes = Recipes.get_recipes(['рис'], amount=2)
+# # print(dishes[0][2])
+# for dish in dishes:
+#     img_id = get_image_id(dish[2])
+# print(IMGS)
+# t2 = time()
+# print(t2 - t1)

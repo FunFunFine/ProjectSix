@@ -58,7 +58,7 @@ def handle_dialog(req, res, user_storage):
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюда из имеющихся у вас ингредиентов.\n'
                      'Какие ингредиенты у вас есть?')
     else:
-        dishes = Recipes.get_recipes(req.command.split(), amount=1)
+        dishes = Recipes.get_recipes(req.command.split(), amount=3)
 
         if len(dishes) <= 0:
             on_error(res)
