@@ -5,10 +5,12 @@ import Recipes
 import random
 
 from flask import Flask, request
+
 app = Flask(__name__)
 
 from alice_sdk import AliceRequest, AliceResponse
 from Utilities import Dish
+from upload_image import get_image_id
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -44,7 +46,7 @@ def on_ok(res, dishes):
     def get_items(dishes):
         items = []
         for dish in dishes:
-            items.append(Dish.get_dish('5274', dish[0], '', dish[0], dish[1]))
+            items.append(Dish.get_dish(get_image_id(dish[2]), dish[0], '', dish[0], dish[1]))
         return items
 
     res.set_text('Вы можете попробовать одно из этих блюд')
@@ -56,13 +58,12 @@ def handle_dialog(req, res, user_storage):
         res.set_text('Здравствуйте, я помогу вам подобрать рецепт блюда из имеющихся у вас ингредиентов.\n'
                      'Какие ингредиенты у вас есть?')
     else:
-        dishes = Recipes.get_recipes(req.command.split(), amount=3)
+        dishes = Recipes.get_recipes(req.command.split(), amount=1)
 
         if len(dishes) <= 0:
             on_error(res)
         else:
             on_ok(res, dishes)
-
 
     res.end()
     user_storage = {}

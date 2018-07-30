@@ -69,7 +69,9 @@ def get_links(ingr_nums, n=1):
         if 'data-title' in e.attrs:
             names.append(e.attrs['data-title'])
         if 'data-src' in e.attrs:
-            pic.append(e.attrs['data-src'])
+            url = 'http:' + e.attrs['data-src']
+            # from upload_image import get_image_id
+            pic.append(url)
         if 'data-href' in e.attrs:
             s = e.attrs['data-href']
             if s.startswith('/'):
